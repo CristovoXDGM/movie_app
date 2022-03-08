@@ -22,16 +22,19 @@ void main() {
     when(() => repository.search(any()))
         .thenAnswer((invocation) async => const Right(<ResultSearchEntity>[]));
     var result = await usecase("movie name");
-    expect(result, isA<Right>());
-    expect(result | List<ResultSearchEntity>.empty(),
-        isA<List<ResultSearchEntity>>());
+
+    expect(result.fold(id, id), isA<List<ResultSearchEntity>>());
   });
 
   test("Should return a SearchMoviesException", () async {
     when(() => repository.search(any()))
-        .thenAnswer((invocation) async => const Right(<ResultSearchEntity>[]));
-    var result = await usecase("");
-    expect(result.isLeft(), true);
+        .thenAnswer((invocation) async => Left(InvalidMovieNameError()));
+
+    var result = await usecase(null);
+
+    expect(result.fold(id, id), isA<InvalidMovieNameError>());
+
+    result = await usecase("");
     expect(result.fold(id, id), isA<InvalidMovieNameError>());
   });
 }

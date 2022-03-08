@@ -6,18 +6,23 @@ import 'package:movie_app_fteam/app/modules/search/domain/repositories/search_mo
 
 abstract class SearchMovieByTextUseCase {
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> call(
-      String movieTitle);
+      String? movieTitle);
 }
 
 class SearchMovieByTextImpl implements SearchMovieByTextUseCase {
   final SearchMovieRepository searchMovieRepository;
+
   SearchMovieByTextImpl({
     required this.searchMovieRepository,
   });
 
   @override
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> call(
-      String movieTitle) async {
+      String? movieTitle) async {
+    if (movieTitle == null || movieTitle.isEmpty) {
+      return Left(InvalidMovieNameError());
+    }
+
     return searchMovieRepository.search(movieTitle);
   }
 }

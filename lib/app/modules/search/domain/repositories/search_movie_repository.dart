@@ -4,5 +4,5 @@ import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
 
 abstract class SearchMovieRepository {
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> search(
-      String movieTitle);
+      String? movieTitle);
 }
