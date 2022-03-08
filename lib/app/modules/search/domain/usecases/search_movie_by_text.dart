@@ -6,7 +6,7 @@ import 'package:movie_app_fteam/app/modules/search/domain/repositories/search_mo
 
 abstract class SearchMovieByTextUseCase {
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> call(
-      String? movieTitle);
+      String movieTitle);
 }
 
 class SearchMovieByTextImpl implements SearchMovieByTextUseCase {
@@ -18,8 +18,8 @@ class SearchMovieByTextImpl implements SearchMovieByTextUseCase {
 
   @override
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> call(
-      String? movieTitle) async {
-    if (movieTitle == null || movieTitle.isEmpty) {
+      String movieTitle) async {
+    if (movieTitle.isEmpty) {
       return Left(InvalidMovieNameError());
     }
 

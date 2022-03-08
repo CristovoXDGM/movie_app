@@ -30,7 +30,7 @@ void main() {
     when(() => repository.search(any()))
         .thenAnswer((invocation) async => Left(InvalidMovieNameError()));
 
-    var result = await usecase(null);
+    var result = await usecase("");
 
     expect(result.fold(id, id), isA<InvalidMovieNameError>());
 

@@ -9,20 +9,17 @@ class SearchRepositoryImpl implements SearchMovieRepository {
   final SearchDataSource dataSource;
 
   SearchRepositoryImpl(this.dataSource);
-
   @override
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> search(
-      String? movieTitle) async {
-    List<ResultSearchMovieModel>? list;
-
+      String movieTitle) async {
     try {
-      list = await dataSource.getSearchMovie(movieTitle);
+      final List<ResultSearchMovieModel> list =
+          await dataSource.getSearchMovie(movieTitle);
+      return right(list);
     } on DataSourceSearchResultError catch (e) {
-      left(e);
+      return left(e);
     } catch (list) {
-      left(DataSourceSearchResultError());
+      return left(DataSourceSearchResultError());
     }
-
-    return list == null ? left(DataSourceSearchResultError()) : right(list);
   }
 }
