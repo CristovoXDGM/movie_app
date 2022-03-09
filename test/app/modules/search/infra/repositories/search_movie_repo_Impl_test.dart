@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/entities/result_search.dart';
@@ -25,7 +26,7 @@ void main() {
 
     final result = await repository.search("spider man");
 
-    expect(result.fold((l) => l, (r) => r), isA<List<ResultSearchEntity>>());
+    expect(result.fold(id, id), isA<List<ResultSearchEntity>>());
   });
   test(
       "Should return DataSourceSearchResultNull or DataSourceSearchResultError",

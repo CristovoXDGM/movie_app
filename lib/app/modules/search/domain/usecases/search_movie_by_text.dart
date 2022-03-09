@@ -12,9 +12,9 @@ abstract class SearchMovieByTextUseCase {
 class SearchMovieByTextImpl implements SearchMovieByTextUseCase {
   final SearchMovieRepository searchMovieRepository;
 
-  SearchMovieByTextImpl({
-    required this.searchMovieRepository,
-  });
+  SearchMovieByTextImpl(
+    this.searchMovieRepository,
+  );
 
   @override
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> call(

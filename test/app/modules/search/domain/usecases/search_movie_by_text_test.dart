@@ -15,7 +15,7 @@ void main() {
 
   setUpAll(() {
     repository = SearchRepositoryMock();
-    usecase = SearchMovieByTextImpl(searchMovieRepository: repository);
+    usecase = SearchMovieByTextImpl(repository);
   });
 
   test("Should return a list from ResultSearchEntity", () async {
