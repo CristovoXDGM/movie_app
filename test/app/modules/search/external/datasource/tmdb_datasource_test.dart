@@ -1,26 +1,34 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
 import 'package:movie_app_fteam/app/modules/search/external/datasource/tmdb_datasource.dart';
 import 'package:movie_app_fteam/app/modules/search/infra/datasource/search_movie_datasource.dart';
 import 'package:movie_app_fteam/app/modules/search/utils/tmdb_search_response.dart';
+import 'package:uno/uno.dart';
 
-class DioMock extends Mock implements Dio {}
+class UnoMock extends Mock implements Uno {}
 
-class RequestOptionsMock extends Mock implements RequestOptions {}
+class RequestOptionsMock extends Mock implements Request {}
 
 void main() {
-  final dio = DioMock();
-  final SearchDataSource dataSource = TmdbDataSource(dio);
+  late UnoMock uno;
+  late SearchDataSource dataSource;
+
+  setUpAll(() {
+    uno = UnoMock();
+    dataSource = TmdbDataSource(uno);
+  });
 
   test("Should return a list from ResultSearchMovieModel", () {
-    when(() => dio.get(any())).thenAnswer((invocation) async => Response(
-        requestOptions: RequestOptionsMock(),
-        data: jsonDecode(tmdbResponse),
-        statusCode: 200));
+    when(() => uno.get(any())).thenAnswer(
+      (invocation) async => Response(
+          headers: {'Content-Type': 'application/json'},
+          data: jsonDecode(tmdbResponse),
+          request: RequestOptionsMock(),
+          status: 200),
+    );
 
     final future = dataSource.getSearchMovie("spider man");
 
@@ -28,8 +36,11 @@ void main() {
   });
 
   test("Should return a DataSourceSearchResultError", () {
-    when(() => dio.get(any())).thenAnswer((invocation) async => Response(
-        requestOptions: RequestOptionsMock(), data: null, statusCode: 401));
+    when(() => uno.get(any())).thenAnswer((invocation) async => Response(
+        headers: {'Content-Type': 'application/json'},
+        request: RequestOptionsMock(),
+        data: null,
+        status: 401));
 
     final future = dataSource.getSearchMovie("spider man");
 
