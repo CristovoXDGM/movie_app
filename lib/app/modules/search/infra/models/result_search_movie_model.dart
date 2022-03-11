@@ -3,19 +3,13 @@ import 'dart:convert';
 import 'package:movie_app_fteam/app/modules/search/domain/entities/result_search.dart';
 
 class ResultSearchMovieModel extends ResultSearchEntity {
-  final String movieImage;
-  final String movieTitle;
-  final String movieCategory;
-  final String movieLevel;
-  final String movieAccent;
-  final String movieRating;
   ResultSearchMovieModel({
-    required this.movieImage,
-    required this.movieTitle,
-    required this.movieCategory,
-    required this.movieLevel,
-    required this.movieAccent,
-    required this.movieRating,
+    required String movieImage,
+    required String movieTitle,
+    required String movieCategory,
+    required String movieLevel,
+    required String movieAccent,
+    required double movieRating,
   }) : super(
             movieImage: '',
             movieTitle: '',

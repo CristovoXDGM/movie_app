@@ -6,6 +6,6 @@ class SearchMovieBloc extends Bloc<String, SearchState> {
   final SearchMovieByTextUseCase usecase;
 
   SearchMovieBloc(this.usecase) : super(SearchStateStart()) {
-    on((event, emit) => emit(SearchStateLoading()));
+    on<String>((event, emit) => emit(SearchStateLoading()));
   }
 }

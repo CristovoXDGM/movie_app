@@ -18,6 +18,9 @@ class SearchRepositoryImpl implements SearchMovieRepository {
       return right(list);
     } on DataSourceSearchResultError catch (e) {
       return left(e);
+
+      //Generic catch - don't use
+
     } catch (list) {
       return left(DataSourceSearchResultError());
     }
