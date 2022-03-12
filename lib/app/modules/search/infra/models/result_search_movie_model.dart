@@ -9,7 +9,7 @@ class ResultSearchMovieModel extends ResultSearchEntity {
     required String movieCategory,
     required String movieLevel,
     required String movieAccent,
-    required double movieRating,
+    required String movieRating,
   }) : super(
             movieImage: '',
             movieTitle: '',

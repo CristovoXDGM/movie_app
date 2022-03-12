@@ -15,6 +15,7 @@ class TmdbDataSource implements SearchDataSource {
   @override
   Future<List<ResultSearchMovieModel>> getSearchMovie(String movieTitle) async {
     //Add base url to uno client http
+
     final response = await uno.get(
         "https://api.themoviedb.org/3/search/movie?api_key=fa75ca339a4b269c5f893e3aa248220f&query=${_normalizeSearch(movieTitle)}");
 
