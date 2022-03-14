@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/entities/result_search.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
-import 'package:movie_app_fteam/app/modules/search/domain/usecases/search_movie_by_text.dart';
+import 'package:movie_app_fteam/app/modules/search/domain/usecases/search_movie_by_text_usecase.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/bloc/events/search_movie_bloc_event.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/bloc/search_movie_bloc.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/bloc/states/search_result_bloc_state.dart';

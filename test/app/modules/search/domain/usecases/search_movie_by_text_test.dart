@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/entities/result_search.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/repositories/search_movie_repository.dart';
-import 'package:movie_app_fteam/app/modules/search/domain/usecases/search_movie_by_text.dart';
+import 'package:movie_app_fteam/app/modules/search/domain/usecases/search_movie_by_text_usecase.dart';
 
 class SearchRepositoryMock extends Mock implements SearchMovieRepository {}
 
@@ -32,9 +32,6 @@ void main() {
 
     var result = await usecase("");
 
-    expect(result.fold(id, id), isA<InvalidMovieNameError>());
-
-    result = await usecase("");
     expect(result.fold(id, id), isA<InvalidMovieNameError>());
   });
 }

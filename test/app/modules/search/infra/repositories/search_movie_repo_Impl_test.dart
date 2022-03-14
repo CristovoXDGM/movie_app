@@ -8,15 +8,15 @@ import 'package:movie_app_fteam/app/modules/search/infra/datasource/search_movie
 import 'package:movie_app_fteam/app/modules/search/infra/models/result_search_movie_model.dart';
 import 'package:movie_app_fteam/app/modules/search/infra/repositories/search_movie_repo_Impl.dart';
 
-class SearchRepositoryMock extends Mock implements SearchDataSource {}
+class SearchRepositorDatasourceMock extends Mock implements SearchDataSource {}
 
 void main() {
-  late SearchRepositoryMock datasource;
+  late SearchRepositorDatasourceMock datasource;
 
   late SearchMovieRepository repository;
 
   setUpAll(() {
-    datasource = SearchRepositoryMock();
+    datasource = SearchRepositorDatasourceMock();
     repository = SearchRepositoryImpl(datasource);
   });
 
@@ -36,6 +36,6 @@ void main() {
 
     final result = await repository.search("spider man");
 
-    expect(result.fold((l) => l, (r) => r), isA<DataSourceSearchResultError>());
+    expect(result.fold(id, id), isA<DataSourceSearchResultError>());
   });
 }

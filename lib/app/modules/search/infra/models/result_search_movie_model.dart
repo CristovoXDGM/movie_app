@@ -40,7 +40,7 @@ class ResultSearchMovieModel extends ResultSearchEntity {
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() => jsonEncode(toMap());
 
   factory ResultSearchMovieModel.fromJson(String source) =>
       ResultSearchMovieModel.fromMap(json.decode(source));
