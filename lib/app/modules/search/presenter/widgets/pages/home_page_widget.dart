@@ -21,10 +21,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
-    searchMovieBloc.add(StartSearchMoviesEvent(movieTitle: "a"));
+    searchMovieBloc.add(StartSearchMoviesEvent(movieTitle: 'a'));
   }
 
   @override
@@ -60,12 +59,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
                       if (state is SearchStateStart) {
                         return const Center(
-                          child: Text("Digite o nome de um filme"),
+                          child: Text('Type a movie name'),
                         );
                       }
                       if (state is SearchStateError) {
                         return const Center(
-                          child: Text("Houve um erro"),
+                          child: Text('An error Occurred'),
                         );
                       }
 

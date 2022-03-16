@@ -1,4 +1,5 @@
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
+
 import 'package:movie_app_fteam/app/modules/search/infra/datasource/search_movie_datasource.dart';
 import 'package:movie_app_fteam/app/modules/search/infra/models/result_search_movie_model.dart';
 import 'package:movie_app_fteam/app/modules/shared/constants/api_urls.dart';
@@ -14,9 +15,11 @@ class TmdbSearchMoviesByTextDataSource implements SearchDataSource {
   }
 
   @override
-  Future<List<ResultSearchMovieModel>> getSearchMovie(String movieTitle) async {
+  Future<List<ResultSearchMovieModel>> getSearchMovie(
+    String movieTitle,
+  ) async {
     final response = await uno.get(
-        "${ApiUrls.baseUrl}${ApiUrls.searchMovieBytext}?api_key=${ApiUrls.apiKey}&query=${_normalizeSearch(movieTitle)}");
+        "${ApiUrls.baseUrl}${ApiUrls.searchMovieBytext}?api_key=${ApiUrls.apiKey}&query=${_normalizeSearch(movieTitle)} ");
 
     if (response.status == 200) {
       try {

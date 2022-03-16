@@ -11,7 +11,8 @@ class SearchRepositoryImpl implements SearchMovieRepository {
   SearchRepositoryImpl(this.dataSource);
   @override
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> search(
-      String movieTitle) async {
+    String movieTitle,
+  ) async {
     try {
       final List<ResultSearchMovieModel> list =
           await dataSource.getSearchMovie(movieTitle);

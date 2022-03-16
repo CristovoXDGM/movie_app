@@ -21,7 +21,7 @@ void main() {
     dataSource = TmdbSearchMoviesByTextDataSource(uno);
   });
 
-  test("Should return a list of ResultSearchMovieModel", () {
+  test('Should return a list of ResultSearchMovieModel', () {
     when(() => uno.get(any())).thenAnswer(
       (invocation) async => Response(
           headers: {'Content-Type': 'application/json'},
@@ -30,7 +30,7 @@ void main() {
           status: 200),
     );
 
-    final future = dataSource.getSearchMovie("spider man");
+    final future = dataSource.getSearchMovie('spider man');
 
     expect(future, completes);
   });

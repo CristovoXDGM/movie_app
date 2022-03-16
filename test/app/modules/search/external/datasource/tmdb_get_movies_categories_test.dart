@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
@@ -19,18 +21,18 @@ void main() {
     dataSource = TmdbGetMovieCategoriesDataSource(uno);
   });
 
-  test("Should return a list of GetMovieCategoryModel ", () {
+  test('Should return a list of GetMovieCategoryModel ', () {
     when(() => uno.get(any())).thenAnswer((invocation) async => Response(
         headers: {'Content-Type': 'application/json'},
         request: RequestOptionsMock(),
         status: 200,
-        data: tmdbCategoriesResponse));
+        data: jsonDecode(tmdbCategoriesResponse)));
 
     final future = dataSource.getMovieCategories();
 
     expect(future, completes);
   });
-  test("Should return a  CategoriesUnavailable error", () {
+  test('Should return a  CategoriesUnavailable error', () {
     when(() => uno.get(any())).thenAnswer((invocation) async => Response(
         headers: {'Content-Type': 'application/json'},
         request: RequestOptionsMock(),
