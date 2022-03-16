@@ -6,37 +6,28 @@ class ResultSearchMovieModel extends ResultSearchEntity {
   ResultSearchMovieModel({
     required String movieImage,
     required String movieTitle,
-    required String movieCategory,
-    required String movieLevel,
+    required List movieCategory,
     required String movieAccent,
-    required String movieRating,
-  }) : super(
-            movieImage: '',
-            movieTitle: '',
-            movieCategory: '',
-            movieLevel: '',
-            movieAccent: '',
-            movieRating: '');
+    required double movieRating,
+  }) : super(movieImage, movieTitle, movieCategory, movieAccent, movieRating);
 
   Map<String, dynamic> toMap() {
     return {
-      'movieImage': movieImage,
-      'movieTitle': movieTitle,
-      'movieCategory': movieCategory,
-      'movieLevel': movieLevel,
-      'movieAccent': movieAccent,
-      'movieRating': movieRating,
+      'backdrop_path': movieImage,
+      'title': movieTitle,
+      'genre_ids': movieCategory,
+      'original_language': movieAccent,
+      'vote_average': movieRating,
     };
   }
 
-  factory ResultSearchMovieModel.fromMap(Map<String, dynamic> map) {
+  factory ResultSearchMovieModel.fromMap(Map map) {
     return ResultSearchMovieModel(
-      movieImage: map['movieImage'] ?? '',
-      movieTitle: map['movieTitle'] ?? '',
-      movieCategory: map['movieCategory'] ?? '',
-      movieLevel: map['movieLevel'] ?? '',
-      movieAccent: map['movieAccent'] ?? '',
-      movieRating: map['movieRating'] ?? '',
+      movieTitle: map['title'] ?? '',
+      movieCategory: map['genre_ids'] ?? [],
+      movieAccent: map['original_language'] ?? '',
+      movieRating: double.parse(map['vote_average'].toString()),
+      movieImage: map['poster_path'] ?? '',
     );
   }
 

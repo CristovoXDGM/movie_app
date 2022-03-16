@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
-import 'package:movie_app_fteam/app/modules/search/external/datasource/tmdb_datasource.dart';
+import 'package:movie_app_fteam/app/modules/search/external/datasource/tmdb_search_movies_by_text_datasource.dart';
 import 'package:movie_app_fteam/app/modules/search/infra/datasource/search_movie_datasource.dart';
-import 'package:movie_app_fteam/app/modules/search/utils/tmdb_search_response.dart';
+import 'package:movie_app_fteam/app/modules/shared/utils/tmdb_search_response.dart';
 import 'package:uno/uno.dart';
 
 class UnoMock extends Mock implements Uno {}
@@ -13,15 +13,15 @@ class UnoMock extends Mock implements Uno {}
 class RequestOptionsMock extends Mock implements Request {}
 
 void main() {
-  late UnoMock uno;
+  late Uno uno;
   late SearchDataSource dataSource;
 
   setUpAll(() {
     uno = UnoMock();
-    dataSource = TmdbDataSource(uno);
+    dataSource = TmdbSearchMoviesByTextDataSource(uno);
   });
 
-  test("Should return a list from ResultSearchMovieModel", () {
+  test("Should return a list of ResultSearchMovieModel", () {
     when(() => uno.get(any())).thenAnswer(
       (invocation) async => Response(
           headers: {'Content-Type': 'application/json'},

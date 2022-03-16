@@ -7,33 +7,33 @@ import 'package:movie_app_fteam/app/modules/search/domain/repositories/get_movie
 import 'package:movie_app_fteam/app/modules/search/domain/usecases/get_movie_categories_usecase.dart';
 
 class SelectMovieCategoryRepositoryMock extends Mock
-    implements GetMovieCategoryRepository {}
+    implements GetMovieCategoriesRepository {}
 
 void main() {
-  late GetMovieCategoryRepository repository;
+  late GetMovieCategoriesRepository repository;
 
   late GetMovieCategoriesUseCase usecase;
 
   setUpAll(() {
     repository = SelectMovieCategoryRepositoryMock();
 
-    usecase = SelectMovieCategoryImpl(repository);
+    usecase = GetMovieCategoriesImpl(repository);
   });
 
   test("Should return a MovieCategoriesEntity List", () async {
-    when(() => repository.selectCategory(any())).thenAnswer(
+    when(() => repository.getCategories()).thenAnswer(
         (invocation) async => const Right(<MovieCategoriesEntity>[]));
 
-    var results = await usecase("action");
+    var results = await usecase();
 
     expect(results.fold(id, id), isA<List<MovieCategoriesEntity>>());
   });
-  test("Should return a InvalidMovieCategory error", () async {
-    when(() => repository.selectCategory(any()))
-        .thenAnswer((invocation) async => Left(InvalidMovieCategory()));
+  test("Should return a CategoriesUnavailable error", () async {
+    when(() => repository.getCategories())
+        .thenAnswer((invocation) async => Left(CategoriesUnavailable()));
 
-    var results = await usecase("");
+    var results = await usecase();
 
-    expect(results.fold(id, id), isA<InvalidMovieCategory>());
+    expect(results.fold(id, id), isA<CategoriesUnavailable>());
   });
 }

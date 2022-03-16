@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:movie_app_fteam/app/modules/search/presenter/bloc/events/search_movie_bloc_event.dart';
+import 'package:movie_app_fteam/app/modules/search/presenter/bloc/search_movie_bloc.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const CustomAppBar({Key? key, this.appBarHeight = 210}) : super(key: key);
+  const CustomAppBar(
+      {Key? key, this.appBarHeight = 180, required this.onChange})
+      : super(key: key);
   final double appBarHeight;
+  final Function(String e) onChange;
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -13,6 +19,9 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   final double iconsSize = 30;
+
+  final searchMovieBloc = Modular.get<SearchMovieBloc>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,10 +41,15 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   color: Colors.white,
                 ),
               ),
-              const Expanded(
+              Expanded(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: TextField(),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      label: Text("Type a movie name..."),
+                    ),
+                    onChanged: widget.onChange,
+                  ),
                 ),
               ),
               Icon(
@@ -59,23 +73,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ),
           ),
           const SizedBox(height: 22),
-          SizedBox(
-            width: double.infinity,
-            height: 40,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: 100,
-                  height: 31,
-                  margin: const EdgeInsets.only(right: 18),
-                  decoration: BoxDecoration(
-                      color: const Color(0xff12162D),
-                      borderRadius: BorderRadius.circular(15)),
-                );
-              },
-            ),
-          )
         ],
       ),
     );

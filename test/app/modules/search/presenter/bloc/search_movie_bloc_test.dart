@@ -8,14 +8,15 @@ import 'package:movie_app_fteam/app/modules/search/presenter/bloc/events/search_
 import 'package:movie_app_fteam/app/modules/search/presenter/bloc/search_movie_bloc.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/bloc/states/search_result_bloc_state.dart';
 
-class SearchMovieByTextMock extends Mock implements SearchMovieByTextUseCase {}
+class SearchMovieByTextUseCaseMock extends Mock
+    implements SearchMovieByTextUseCase {}
 
 void main() {
   late SearchMovieBloc searchMovieBloc;
   late SearchMovieByTextUseCase usecase;
 
   setUpAll(() {
-    usecase = SearchMovieByTextMock();
+    usecase = SearchMovieByTextUseCaseMock();
     searchMovieBloc = SearchMovieBloc(usecase);
   });
 
