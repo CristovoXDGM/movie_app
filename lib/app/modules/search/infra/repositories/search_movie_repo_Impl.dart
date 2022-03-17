@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:movie_app_fteam/app/modules/search/domain/entities/params/search_movies_params.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/entities/result_search.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/repositories/search_movie_repository.dart';
@@ -11,11 +12,10 @@ class SearchRepositoryImpl implements SearchMovieRepository {
   SearchRepositoryImpl(this.dataSource);
   @override
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> search(
-    String movieTitle,
-  ) async {
+      SearchMoviesParams params) async {
     try {
       final List<ResultSearchMovieModel> list =
-          await dataSource.getSearchMovie(movieTitle);
+          await dataSource.getSearchMovie(params);
       return right(list);
     } on DataSourceSearchResultError catch (e) {
       return left(e);

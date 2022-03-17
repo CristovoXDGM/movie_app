@@ -1,6 +1,8 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:movie_app_fteam/app/modules/search/domain/entities/params/search_movies_params.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/entities/result_search.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/usecases/search_movie_by_text_usecase.dart';
@@ -18,32 +20,25 @@ void main() {
   setUpAll(() {
     usecase = SearchMovieByTextUseCaseMock();
     searchMovieBloc = SearchMovieBloc(usecase);
+    registerFallbackValue(SearchMoviesParams());
   });
 
-  test("Should return states in the correct order", () {
-    when(() => usecase.call("batman"))
-        .thenAnswer((invocation) async => right(<ResultSearchEntity>[]));
+  blocTest<SearchMovieBloc, SearchState>(
+      'Should return states in the correct order',
+      build: () {
+        when(() => usecase.call(any()))
+            .thenAnswer((invocation) async => right(<ResultSearchEntity>[]));
+        return searchMovieBloc;
+      },
+      act: (bloc) => bloc.add(StartSearchMoviesEvent(movieTitle: 'batman')),
+      expect: () => [isA<SearchStateLoading>(), isA<SearchStateSuccess>()]);
 
-    expect(
-      searchMovieBloc.stream,
-      emitsInOrder([
-        isA<SearchStateLoading>(),
-        isA<SearchStateSuccess>(),
-      ]),
-    );
-    searchMovieBloc.add(StartSearchMoviesEvent(movieTitle: "batman"));
-  });
-  test("Should return states error", () {
-    when(() => usecase.call(any()))
-        .thenAnswer((invocation) async => left(InvalidMovieNameError()));
-
-    expect(
-      searchMovieBloc.stream,
-      emitsInOrder([
-        isA<SearchStateLoading>(),
-        isA<SearchStateError>(),
-      ]),
-    );
-    searchMovieBloc.add(StartSearchMoviesEvent(movieTitle: "batman"));
-  });
+  blocTest<SearchMovieBloc, SearchState>('Should return states error',
+      build: () {
+        when(() => usecase.call(any()))
+            .thenAnswer((invocation) async => left(InvalidMovieNameError()));
+        return SearchMovieBloc(usecase);
+      },
+      act: (bloc) => bloc.add(StartSearchMoviesEvent(movieTitle: 'batman')),
+      expect: () => [isA<SearchStateLoading>(), isA<SearchStateError>()]);
 }

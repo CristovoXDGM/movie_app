@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:movie_app_fteam/app/modules/search/domain/entities/params/search_movies_params.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/entities/result_search.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
 
@@ -6,8 +7,7 @@ import 'package:movie_app_fteam/app/modules/search/domain/repositories/search_mo
 
 abstract class SearchMovieByTextUseCase {
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> call(
-    String movieTitle,
-  );
+      SearchMoviesParams params);
 }
 
 class SearchMovieByTextImpl implements SearchMovieByTextUseCase {
@@ -19,12 +19,11 @@ class SearchMovieByTextImpl implements SearchMovieByTextUseCase {
 
   @override
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> call(
-    String movieTitle,
-  ) async {
-    if (movieTitle.isEmpty) {
-      return Left(InvalidMovieNameError());
+      SearchMoviesParams params) async {
+    if (params.movieTitle.isEmpty) {
+      return left(InvalidMovieNameError());
     }
 
-    return searchMovieRepository.search(movieTitle);
+    return searchMovieRepository.search(params);
   }
 }

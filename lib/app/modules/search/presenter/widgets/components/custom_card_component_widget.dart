@@ -5,9 +5,9 @@ import 'package:shimmer/shimmer.dart';
 class CardComponentWidget extends StatefulWidget {
   const CardComponentWidget({
     Key? key,
-    this.title = "",
-    this.accent = "",
-    this.image = "",
+    this.title = '',
+    this.accent = '',
+    this.image = '',
     this.rating = 0.0,
     required this.cardHeight,
     this.imageAspectRatio = 3 / 4,
@@ -61,7 +61,6 @@ class _CardComponentWidgetState extends State<CardComponentWidget> {
                 )),
               ),
               placeholder: (context, url) => Shimmer.fromColors(
-                direction: ShimmerDirection.ltr,
                 highlightColor: Colors.grey.shade100,
                 baseColor: Colors.grey.shade300,
                 child: Container(
@@ -93,7 +92,7 @@ class _CardComponentWidgetState extends State<CardComponentWidget> {
                         fontWeight: FontWeight.bold,
                         fontSize: 20),
                   ),
-                  Text("Accent: ${widget.accent}",
+                  Text('Accent: ${widget.accent}',
                       style: const TextStyle(color: Colors.white)),
                 ],
               ),
@@ -106,7 +105,6 @@ class _CardComponentWidgetState extends State<CardComponentWidget> {
               height: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GestureDetector(
                     onTap: () {

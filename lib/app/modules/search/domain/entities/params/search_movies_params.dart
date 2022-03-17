@@ -1,6 +1,6 @@
 class SearchMoviesParams {
   final int page;
-  int? resultsLimt;
+  final String movieTitle;
 
-  SearchMoviesParams(this.page, {this.resultsLimt});
+  SearchMoviesParams({this.page = 1, this.movieTitle = ''});
 }

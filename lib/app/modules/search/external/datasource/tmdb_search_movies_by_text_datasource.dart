@@ -1,3 +1,4 @@
+import 'package:movie_app_fteam/app/modules/search/domain/entities/params/search_movies_params.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
 
 import 'package:movie_app_fteam/app/modules/search/infra/datasource/search_movie_datasource.dart';
@@ -11,15 +12,14 @@ class TmdbSearchMoviesByTextDataSource implements SearchDataSource {
   TmdbSearchMoviesByTextDataSource(this.uno);
 
   String _normalizeSearch(String searchMovieTitle) {
-    return searchMovieTitle.replaceAll("from", "+");
+    return searchMovieTitle.replaceAll('from', '+');
   }
 
   @override
   Future<List<ResultSearchMovieModel>> getSearchMovie(
-    String movieTitle,
-  ) async {
+      SearchMoviesParams params) async {
     final response = await uno.get(
-        "${ApiUrls.baseUrl}${ApiUrls.searchMovieBytext}?api_key=${ApiUrls.apiKey}&query=${_normalizeSearch(movieTitle)} ");
+        '${ApiUrls.baseUrl}${ApiUrls.searchMovieBytext}?api_key=${ApiUrls.apiKey}&query=${_normalizeSearch(params.movieTitle)}&page=${params.page} ');
 
     if (response.status == 200) {
       try {
