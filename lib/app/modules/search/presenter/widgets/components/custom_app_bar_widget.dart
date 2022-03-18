@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/bloc/events/search_movie_bloc_event.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/bloc/search_movie_bloc.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const CustomAppBar(
-      {Key? key, this.appBarHeight = 180, required this.onChange})
-      : super(key: key);
+  const CustomAppBar({
+    Key? key,
+    this.appBarHeight = 180,
+    required this.inputOnChange,
+    required this.movieTitleController,
+  }) : super(key: key);
   final double appBarHeight;
-  final Function(String e) onChange;
+  final Function(String e) inputOnChange;
+  final TextEditingController movieTitleController;
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -19,7 +22,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   final double iconsSize = 30;
-
+  final inputTextStyle = const TextStyle(color: Colors.white);
   final searchMovieBloc = Modular.get<SearchMovieBloc>();
 
   @override
@@ -31,7 +34,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
       child: Column(
         children: [
           Row(
-            mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Align(
@@ -45,10 +47,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
-                    decoration: const InputDecoration(
-                      label: Text("Type a movie name..."),
-                    ),
-                    onChanged: widget.onChange,
+                    controller: widget.movieTitleController,
+                    style: inputTextStyle,
+                    decoration: InputDecoration(
+                        hintText: 'Type a movie name...',
+                        hintStyle: inputTextStyle,
+                        focusColor: Colors.green,
+                        border: const OutlineInputBorder()),
+                    onChanged: widget.inputOnChange,
                   ),
                 ),
               ),
@@ -68,7 +74,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           Container(
             alignment: Alignment.centerLeft,
             child: const Text(
-              "Categories",
+              'Categories',
               style: TextStyle(color: Colors.white, fontSize: 31),
             ),
           ),

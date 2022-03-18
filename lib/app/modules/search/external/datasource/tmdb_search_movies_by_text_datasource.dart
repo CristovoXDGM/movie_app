@@ -11,15 +11,11 @@ class TmdbSearchMoviesByTextDataSource implements SearchDataSource {
 
   TmdbSearchMoviesByTextDataSource(this.uno);
 
-  String _normalizeSearch(String searchMovieTitle) {
-    return searchMovieTitle.replaceAll('from', '+');
-  }
-
   @override
   Future<List<ResultSearchMovieModel>> getSearchMovie(
       SearchMoviesParams params) async {
     final response = await uno.get(
-        '${ApiUrls.baseUrl}${ApiUrls.searchMovieBytext}?api_key=${ApiUrls.apiKey}&query=${_normalizeSearch(params.movieTitle)}&page=${params.page} ');
+        '${ApiUrls.baseUrl}${ApiUrls.searchMovieBytext}?api_key=${ApiUrls.apiKey}&query=${params.movieTitle}&page=${params.page} ');
 
     if (response.status == 200) {
       try {
@@ -29,6 +25,8 @@ class TmdbSearchMoviesByTextDataSource implements SearchDataSource {
         return list;
       } on InvalidMapKey catch (e) {
         throw InvalidMapKey(e.toString());
+      } catch (e) {
+        throw DataSourceSearchResultError(message: e.toString());
       }
     } else {
       throw DataSourceSearchResultError();

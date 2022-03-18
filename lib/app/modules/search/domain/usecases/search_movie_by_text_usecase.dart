@@ -16,7 +16,7 @@ class SearchMovieByTextImpl implements SearchMovieByTextUseCase {
   SearchMovieByTextImpl(
     this.searchMovieRepository,
   );
-
+//Todo: treat empty search better
   @override
   Future<Either<SearchMoviesException, List<ResultSearchEntity>>> call(
       SearchMoviesParams params) async {

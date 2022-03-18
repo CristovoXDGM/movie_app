@@ -5,7 +5,7 @@ abstract class SearchState {}
 class SearchStateSuccess implements SearchState {
   final List<ResultSearchEntity> results;
 
-  SearchStateSuccess(this.results);
+  SearchStateSuccess({this.results = const []});
 }
 
 class SearchStateStart implements SearchState {}

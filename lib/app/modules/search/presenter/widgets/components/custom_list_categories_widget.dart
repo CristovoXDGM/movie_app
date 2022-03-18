@@ -15,7 +15,7 @@ class CustomListCategoriesWidget extends StatefulWidget {
 class _CustomListCategoriesWidgetState
     extends State<CustomListCategoriesWidget> {
   final movieCategoriesBloc = Modular.get<GetMovieCategoriesBloc>();
-
+  int currentCategoryIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -33,7 +33,7 @@ class _CustomListCategoriesWidgetState
     return SizedBox(
         width: double.infinity,
         height: 40,
-        child: StreamBuilder(
+        child: StreamBuilder<GetMovieCategoriesState>(
             stream: movieCategoriesBloc.stream,
             builder: (context, snapshot) {
               var state = movieCategoriesBloc.state;
@@ -43,10 +43,15 @@ class _CustomListCategoriesWidgetState
                   child: CircularProgressIndicator(),
                 );
               }
+              if (state is StartGetCategories) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
               if (state is ErrorGetCategories) {
                 return const Center(
-                  child: Text("Categories unavailable"),
+                  child: Text('Categories unavailable'),
                 );
               }
 
@@ -56,21 +61,30 @@ class _CustomListCategoriesWidgetState
                 scrollDirection: Axis.horizontal,
                 itemCount: result.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    width: 100,
-                    height: 31,
-                    alignment: Alignment.center,
-                    child: Text(
-                      result[index].category,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentCategoryIndex = index;
+                      });
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 31,
+                      alignment: Alignment.center,
+                      child: Text(
+                        result[index].category,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      margin: const EdgeInsets.only(right: 18),
+                      decoration: BoxDecoration(
+                          color: currentCategoryIndex == index
+                              ? const Color(0xff3D57BC)
+                              : const Color(0xff12162D),
+                          borderRadius: BorderRadius.circular(15)),
                     ),
-                    margin: const EdgeInsets.only(right: 18),
-                    decoration: BoxDecoration(
-                        color: const Color(0xff12162D),
-                        borderRadius: BorderRadius.circular(15)),
                   );
                 },
               );

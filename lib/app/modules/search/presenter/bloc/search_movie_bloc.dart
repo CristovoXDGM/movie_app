@@ -11,12 +11,11 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchState> {
 
   SearchMovieBloc(this.usecase) : super(SearchStateStart()) {
     on<StartSearchMoviesEvent>(
-        (event, emit) => searchMovie(event.movieTitle, emit));
+        (event, emit) => searchMovie(event.movieTitle, event.page, emit));
   }
 
-  Future<void> searchMovie(String movieTitle, Emitter emit) async {
+  Future<void> searchMovie(String movieTitle, int page, Emitter emit) async {
     List<ResultSearchEntity> currentMoviesList = [];
-    int page = 1;
 
     if (state is SearchStateSuccess) {
       currentMoviesList = (state as SearchStateSuccess).results;
@@ -24,11 +23,12 @@ class SearchMovieBloc extends Bloc<SearchMovieEvent, SearchState> {
 
     emit(SearchStateLoading());
 
-    final result = await usecase
-        .call(SearchMoviesParams(movieTitle: movieTitle, page: page));
+    final result =
+        await usecase(SearchMoviesParams(movieTitle: movieTitle, page: page));
 
-    result.fold((l) => emit(SearchStateError()), (r) {
-      emit(SearchStateSuccess(currentMoviesList + r));
+    result.fold((searchMovieException) => emit(SearchStateError()),
+        (moviesListResults) {
+      emit(SearchStateSuccess(results: currentMoviesList + moviesListResults));
       page++;
     });
   }

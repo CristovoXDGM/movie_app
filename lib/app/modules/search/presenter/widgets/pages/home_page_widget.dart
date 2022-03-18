@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:movie_app_fteam/app/modules/search/domain/entities/result_search.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/bloc/events/search_movie_bloc_event.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/bloc/search_movie_bloc.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/bloc/states/search_result_bloc_state.dart';
@@ -16,20 +17,35 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget> {
   final Color defaultBackgroundColor = const Color(0xff1E2440);
+  TextEditingController _movieTitleTextEdController = TextEditingController();
+  int currentPage = 1;
+  List<ResultSearchEntity> currentMoviesList = [];
 
+  final ScrollController _scrollController = ScrollController();
   final searchMovieBloc = Modular.get<SearchMovieBloc>();
 
   @override
   void initState() {
     super.initState();
 
-    searchMovieBloc.add(StartSearchMoviesEvent(movieTitle: 'a'));
+    _scrollController.addListener(() {
+      final currentScroll = _scrollController.position.pixels;
+      final maxScroll = _scrollController.position.maxScrollExtent;
+
+      if (currentScroll >= maxScroll * 0.99) {
+        print(_movieTitleTextEdController.text);
+        searchMovieBloc.add(StartSearchMoviesEvent(
+            movieTitle: _movieTitleTextEdController.text, page: currentPage++));
+      }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
     searchMovieBloc.close();
+
+    _scrollController.dispose();
   }
 
   @override
@@ -37,8 +53,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     return SafeArea(
       child: Scaffold(
           appBar: CustomAppBar(
-            onChange: (e) {
-              searchMovieBloc.add(StartSearchMoviesEvent(movieTitle: e));
+            movieTitleController: _movieTitleTextEdController,
+            inputOnChange: (movieTitle) {
+              searchMovieBloc
+                  .add(StartSearchMoviesEvent(movieTitle: movieTitle));
             },
           ),
           backgroundColor: defaultBackgroundColor,
@@ -52,19 +70,35 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 height: 20,
               ),
               Expanded(
-                child: StreamBuilder(
+                child: StreamBuilder<SearchState>(
                     stream: searchMovieBloc.stream,
                     builder: (context, snapshot) {
                       final state = searchMovieBloc.state;
 
                       if (state is SearchStateStart) {
                         return const Center(
-                          child: Text('Type a movie name'),
+                          child: Text(
+                            'Type a movie name',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         );
                       }
                       if (state is SearchStateError) {
                         return const Center(
-                          child: Text('An error Occurred'),
+                          child: Text(
+                            'Movie not found,\nkeep searching',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         );
                       }
 
@@ -74,12 +108,17 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         );
                       }
 
-                      final list = (state as SearchStateSuccess).results;
-
+                      final List<ResultSearchEntity> fetchedMovieList =
+                          state is SearchStateSuccess
+                              ? (state).results
+                              : currentMoviesList;
+                      currentMoviesList = fetchedMovieList;
+                      print(currentMoviesList.length);
                       return ListView.builder(
-                        itemCount: list.length,
+                        itemCount: (fetchedMovieList.length),
+                        controller: _scrollController,
                         itemBuilder: (context, index) {
-                          final item = list[index];
+                          final item = fetchedMovieList[index];
 
                           return CardComponentWidget(
                             cardHeight: 180,

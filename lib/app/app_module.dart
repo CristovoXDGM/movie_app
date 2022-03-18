@@ -1,6 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/usecases/get_movie_categories_usecase.dart';
-
 import 'package:movie_app_fteam/app/modules/search/domain/usecases/search_movie_by_text_usecase.dart';
 import 'package:movie_app_fteam/app/modules/search/external/datasource/tmdb_get_movies_categories.dart';
 import 'package:movie_app_fteam/app/modules/search/external/datasource/tmdb_search_movies_by_text_datasource.dart';

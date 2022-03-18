@@ -2,6 +2,6 @@ abstract class SearchMovieEvent {}
 
 class StartSearchMoviesEvent implements SearchMovieEvent {
   final String movieTitle;
-
-  StartSearchMoviesEvent({this.movieTitle = ''});
+  final int page;
+  StartSearchMoviesEvent({this.movieTitle = '', this.page = 1});
 }

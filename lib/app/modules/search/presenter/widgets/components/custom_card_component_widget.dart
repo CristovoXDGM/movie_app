@@ -50,8 +50,7 @@ class _CardComponentWidgetState extends State<CardComponentWidget> {
         children: [
           AspectRatio(
             aspectRatio: widget.imageAspectRatio,
-            child: SizedBox(
-                child: CachedNetworkImage(
+            child: CachedNetworkImage(
               imageUrl: 'https://image.tmdb.org/t/p/original${widget.image}',
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
@@ -70,7 +69,7 @@ class _CardComponentWidgetState extends State<CardComponentWidget> {
               errorWidget: (context, url, error) => Container(
                 color: Colors.red,
               ),
-            )),
+            ),
           ),
           Expanded(
             child: Container(
