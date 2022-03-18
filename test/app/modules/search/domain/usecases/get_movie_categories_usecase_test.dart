@@ -20,7 +20,7 @@ void main() {
     usecase = GetMovieCategoriesImpl(repository);
   });
 
-  test("Should return a MovieCategoriesEntity List", () async {
+  test('Should return a MovieCategoriesEntity List', () async {
     when(() => repository.getCategories()).thenAnswer(
         (invocation) async => const Right(<MovieCategoriesEntity>[]));
 
@@ -28,7 +28,7 @@ void main() {
 
     expect(results.fold(id, id), isA<List<MovieCategoriesEntity>>());
   });
-  test("Should return a CategoriesUnavailable error", () async {
+  test('Should return a CategoriesUnavailable error', () async {
     when(() => repository.getCategories())
         .thenAnswer((invocation) async => Left(CategoriesUnavailable()));
 

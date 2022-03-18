@@ -23,8 +23,8 @@ class AppModule extends Module {
         Bind.factory((i) => TmdbGetMovieCategoriesDataSource(i())),
         Bind.factory((i) => SearchMovieBloc(i())),
       ];
-
+  // create a search module for every module with every bing and call only current module the
   @override
   List<ModularRoute> get routes =>
-      [ChildRoute("/", child: (context, args) => HomePageWidget())];
+      [ChildRoute('/', child: (context, args) => const HomePageWidget())];
 }

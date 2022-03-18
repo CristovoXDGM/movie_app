@@ -19,7 +19,7 @@ void main() {
     getMovieCategoriesBloc = GetMovieCategoriesBloc(useCase);
   });
 
-  test("Should return states in the correct order", () {
+  test('Should return states in the correct order', () {
     when(() => useCase.call())
         .thenAnswer((invocation) async => right(<MovieCategoriesEntity>[]));
 

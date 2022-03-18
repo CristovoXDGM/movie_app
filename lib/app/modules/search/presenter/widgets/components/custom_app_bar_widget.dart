@@ -6,11 +6,11 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({
     Key? key,
     this.appBarHeight = 180,
-    required this.inputOnChange,
+    required this.onSubmitInput,
     required this.movieTitleController,
   }) : super(key: key);
   final double appBarHeight;
-  final Function(String e) inputOnChange;
+  final Function(String e) onSubmitInput;
   final TextEditingController movieTitleController;
 
   @override
@@ -54,15 +54,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         hintStyle: inputTextStyle,
                         focusColor: Colors.green,
                         border: const OutlineInputBorder()),
-                    onChanged: widget.inputOnChange,
+                    onSubmitted: widget.onSubmitInput,
                   ),
                 ),
               ),
-              Icon(
-                Icons.search,
-                size: iconsSize,
-                color: Colors.white,
-              ),
+              IconButton(
+                  onPressed: () {
+                    widget.onSubmitInput(widget.movieTitleController.text);
+                  },
+                  icon: Icon(
+                    Icons.search,
+                    size: iconsSize,
+                    color: Colors.white,
+                  )),
               Icon(
                 Icons.filter_list_rounded,
                 size: iconsSize,

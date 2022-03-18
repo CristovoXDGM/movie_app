@@ -66,9 +66,7 @@ class _CardComponentWidgetState extends State<CardComponentWidget> {
                   color: Colors.grey.shade300,
                 ),
               ),
-              errorWidget: (context, url, error) => Container(
-                color: Colors.red,
-              ),
+              errorWidget: (context, url, error) => const Placeholder(),
             ),
           ),
           Expanded(

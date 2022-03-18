@@ -9,12 +9,12 @@ class GetMovieCategoryModel extends MovieCategoriesEntity {
   }) : super(category, id);
 
   Map topMap() {
-    return {"id": id, "category": category};
+    return {'id': id, 'category': category};
   }
 
   factory GetMovieCategoryModel.fromMap(Map map) {
     return GetMovieCategoryModel(
-        id: map["id"] ?? 0, category: map["name"] ?? '');
+        id: map['id'] ?? 0, category: map['name'] ?? '');
   }
 
   String toJson() => jsonEncode(topMap());

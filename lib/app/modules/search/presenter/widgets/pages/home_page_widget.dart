@@ -32,7 +32,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       final currentScroll = _scrollController.position.pixels;
       final maxScroll = _scrollController.position.maxScrollExtent;
 
-      if (currentScroll >= maxScroll * 0.99) {
+      if (currentScroll >= maxScroll) {
         print(_movieTitleTextEdController.text);
         searchMovieBloc.add(StartSearchMoviesEvent(
             movieTitle: _movieTitleTextEdController.text, page: currentPage++));
@@ -54,7 +54,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       child: Scaffold(
           appBar: CustomAppBar(
             movieTitleController: _movieTitleTextEdController,
-            inputOnChange: (movieTitle) {
+            onSubmitInput: (movieTitle) {
               searchMovieBloc
                   .add(StartSearchMoviesEvent(movieTitle: movieTitle));
             },
@@ -78,7 +78,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       if (state is SearchStateStart) {
                         return const Center(
                           child: Text(
-                            'Type a movie name',
+                            'No movies searched',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
@@ -102,32 +102,40 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         );
                       }
 
-                      if (state is SearchStateLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-
                       final List<ResultSearchEntity> fetchedMovieList =
                           state is SearchStateSuccess
                               ? (state).results
                               : currentMoviesList;
                       currentMoviesList = fetchedMovieList;
                       print(currentMoviesList.length);
-                      return ListView.builder(
-                        itemCount: (fetchedMovieList.length),
-                        controller: _scrollController,
-                        itemBuilder: (context, index) {
-                          final item = fetchedMovieList[index];
+                      return Stack(
+                        children: [
+                          ListView.builder(
+                            itemCount: (fetchedMovieList.length),
+                            controller: _scrollController,
+                            itemBuilder: (context, index) {
+                              final item = fetchedMovieList[index];
 
-                          return CardComponentWidget(
-                            cardHeight: 180,
-                            image: item.movieImage,
-                            title: item.movieTitle,
-                            accent: item.movieAccent,
-                            rating: item.movieRating,
-                          );
-                        },
+                              return CardComponentWidget(
+                                cardHeight: 180,
+                                image: item.movieImage,
+                                title: item.movieTitle,
+                                accent: item.movieAccent,
+                                rating: item.movieRating,
+                              );
+                            },
+                          ),
+                          (state is SearchStateLoading)
+                              ? Container(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  color: Colors.black45,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
+                              : Container()
+                        ],
                       );
                     }),
               ),
