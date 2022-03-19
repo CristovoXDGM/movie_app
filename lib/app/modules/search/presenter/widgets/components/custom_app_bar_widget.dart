@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/bloc/search_movie_bloc.dart';
+import 'package:movie_app_fteam/app/modules/search/presenter/store/search_movies_by_text_store.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({
@@ -23,7 +24,6 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   final double iconsSize = 30;
   final inputTextStyle = const TextStyle(color: Colors.white);
-  final searchMovieBloc = Modular.get<SearchMovieBloc>();
 
   @override
   Widget build(BuildContext context) {

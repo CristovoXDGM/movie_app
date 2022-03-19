@@ -6,8 +6,10 @@ import 'package:movie_app_fteam/app/modules/search/domain/entities/params/search
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
 import 'package:movie_app_fteam/app/modules/search/external/datasource/tmdb_search_movies_by_text_datasource.dart';
 import 'package:movie_app_fteam/app/modules/search/infra/datasource/search_movie_datasource.dart';
-import 'package:movie_app_fteam/app/modules/shared/utils/tmdb_search_response.dart';
+
 import 'package:uno/uno.dart';
+
+import '../../utils/tmdb_search_response.dart';
 
 class UnoMock extends Mock implements Uno {}
 

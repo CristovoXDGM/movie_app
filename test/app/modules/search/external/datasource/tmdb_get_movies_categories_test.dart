@@ -5,8 +5,10 @@ import 'package:mocktail/mocktail.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
 import 'package:movie_app_fteam/app/modules/search/external/datasource/tmdb_get_movies_categories.dart';
 import 'package:movie_app_fteam/app/modules/search/infra/datasource/get_movie_categories_datasource.dart';
-import 'package:movie_app_fteam/app/modules/shared/utils/tmdv_categories_response.dart';
+
 import 'package:uno/uno.dart';
+
+import '../../utils/tmdv_categories_response.dart';
 
 class UnoMock extends Mock implements Uno {}
 

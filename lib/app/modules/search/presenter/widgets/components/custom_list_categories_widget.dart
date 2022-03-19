@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/bloc/events/get_movie_categories_event.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/bloc/get_movie_categories_bloc.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/bloc/states/get_movie_categories_bloc_state.dart';
+import 'package:flutter_triple/flutter_triple.dart';
+import 'package:movie_app_fteam/app/modules/search/domain/entities/movie_category.dart';
+import 'package:movie_app_fteam/app/modules/search/presenter/store/get_movie_categories_store.dart';
 
 class CustomListCategoriesWidget extends StatefulWidget {
   const CustomListCategoriesWidget({Key? key}) : super(key: key);
@@ -14,18 +14,12 @@ class CustomListCategoriesWidget extends StatefulWidget {
 
 class _CustomListCategoriesWidgetState
     extends State<CustomListCategoriesWidget> {
-  final movieCategoriesBloc = Modular.get<GetMovieCategoriesBloc>();
+  final movieCategoriesStore = Modular.get<GetMovieCategoriesStore>();
   int currentCategoryIndex = 0;
   @override
   void initState() {
     super.initState();
-    movieCategoriesBloc.add(LoadMovieCategories());
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    movieCategoriesBloc.close();
+    movieCategoriesStore.getMovieCategories();
   }
 
   @override
@@ -33,61 +27,47 @@ class _CustomListCategoriesWidgetState
     return SizedBox(
         width: double.infinity,
         height: 40,
-        child: StreamBuilder<GetMovieCategoriesState>(
-            stream: movieCategoriesBloc.stream,
-            builder: (context, snapshot) {
-              var state = movieCategoriesBloc.state;
-
-              if (state is LoadingGetCategories) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (state is StartGetCategories) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              if (state is ErrorGetCategories) {
-                return const Center(
-                  child: Text('Categories unavailable'),
-                );
-              }
-
-              final result = (state as SuccessGetCategories).results;
-
-              return ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: result.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        currentCategoryIndex = index;
-                      });
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 31,
-                      alignment: Alignment.center,
-                      child: Text(
-                        result[index].category,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+        child: ScopedBuilder(
+          store: movieCategoriesStore,
+          onError: (context, error) => const Center(
+            child: Text('Categories unavailable'),
+          ),
+          onLoading: (context) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          onState: (context, List<MovieCategoriesEntity> state) {
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      currentCategoryIndex = index;
+                    });
+                  },
+                  child: Container(
+                    width: 100,
+                    height: 31,
+                    alignment: Alignment.center,
+                    child: Text(
+                      state[index].category,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
-                      margin: const EdgeInsets.only(right: 18),
-                      decoration: BoxDecoration(
-                          color: currentCategoryIndex == index
-                              ? const Color(0xff3D57BC)
-                              : const Color(0xff12162D),
-                          borderRadius: BorderRadius.circular(15)),
                     ),
-                  );
-                },
-              );
-            }));
+                    margin: const EdgeInsets.only(right: 18),
+                    decoration: BoxDecoration(
+                        color: currentCategoryIndex == index
+                            ? const Color(0xff3D57BC)
+                            : const Color(0xff12162D),
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                );
+              },
+            );
+          },
+        ));
   }
 }
