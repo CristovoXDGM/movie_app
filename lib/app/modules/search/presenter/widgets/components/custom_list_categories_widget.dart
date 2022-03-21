@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:movie_app_fteam/app/modules/search/domain/entities/movie_category.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/store/get_movie_categories_store.dart';
+import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
+import 'package:movie_app_fteam/app/modules/search/presenter/store/home_page_store.dart';
+import 'package:movie_app_fteam/app/modules/search/presenter/store/home_page_widget_state.dart';
 
 class CustomListCategoriesWidget extends StatefulWidget {
   const CustomListCategoriesWidget({Key? key}) : super(key: key);
@@ -14,11 +15,13 @@ class CustomListCategoriesWidget extends StatefulWidget {
 
 class _CustomListCategoriesWidgetState
     extends State<CustomListCategoriesWidget> {
-  final movieCategoriesStore = Modular.get<GetMovieCategoriesStore>();
+  final movieCategoriesStore = Modular.get<HomePageStore>();
+
   int currentCategoryIndex = 0;
   @override
   void initState() {
     super.initState();
+
     movieCategoriesStore.getMovieCategories();
   }
 
@@ -27,7 +30,8 @@ class _CustomListCategoriesWidgetState
     return SizedBox(
         width: double.infinity,
         height: 40,
-        child: ScopedBuilder(
+        child: ScopedBuilder<HomePageStore, SearchMoviesException,
+            HomePageWidgetState>(
           store: movieCategoriesStore,
           onError: (context, error) => const Center(
             child: Text('Categories unavailable'),
@@ -35,23 +39,27 @@ class _CustomListCategoriesWidgetState
           onLoading: (context) => const Center(
             child: CircularProgressIndicator(),
           ),
-          onState: (context, List<MovieCategoriesEntity> state) {
+          onState: (context, state) {
             return ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: state.length,
+              itemCount: state.movieCategories.length,
               itemBuilder: (context, index) {
+                final result = state.movieCategories[index];
+
                 return GestureDetector(
                   onTap: () {
                     setState(() {
                       currentCategoryIndex = index;
                     });
+
+                    movieCategoriesStore.filterMoviesByCategory(result.id);
                   },
                   child: Container(
                     width: 100,
                     height: 31,
                     alignment: Alignment.center,
                     child: Text(
-                      state[index].category,
+                      result.category,
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

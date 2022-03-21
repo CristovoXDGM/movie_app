@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:movie_app_fteam/app/modules/search/domain/entities/result_search.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/bloc/events/search_movie_bloc_event.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/bloc/get_movie_categories_bloc.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/bloc/search_movie_bloc.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/bloc/states/search_result_bloc_state.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/store/search_movies_by_text_store.dart';
+import 'package:movie_app_fteam/app/modules/search/domain/errors/errors.dart';
+import 'package:movie_app_fteam/app/modules/search/presenter/store/home_page_store.dart';
+import 'package:movie_app_fteam/app/modules/search/presenter/store/home_page_widget_state.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/widgets/components/custom_app_bar_widget.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/widgets/components/custom_card_component_widget.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/widgets/components/custom_list_categories_widget.dart';
@@ -25,20 +23,18 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   List<ResultSearchEntity> currentMoviesList = [];
 
   final ScrollController _scrollController = ScrollController();
-  final searchMovieStore = Modular.get<SearchMoviesByTextStore>();
+  final homePageStore = Modular.get<HomePageStore>();
 
   @override
   void initState() {
     super.initState();
-
+    homePageStore.getMoviesByText('a');
     _scrollController.addListener(() {
       final currentScroll = _scrollController.position.pixels;
       final maxScroll = _scrollController.position.maxScrollExtent;
 
       if (currentScroll >= maxScroll) {
-        // print(_movieTitleTextEdController.text);
-
-        searchMovieStore.getMoviesByText(
+        homePageStore.getMoviesByText(
             _movieTitleTextEdController.text, currentPage++);
       }
     });
@@ -58,7 +54,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           appBar: CustomAppBar(
             movieTitleController: _movieTitleTextEdController,
             onSubmitInput: (movieTitle) {
-              searchMovieStore.getMoviesByText(movieTitle);
+              homePageStore.getMoviesByText(movieTitle);
             },
           ),
           backgroundColor: defaultBackgroundColor,
@@ -72,7 +68,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 height: 20,
               ),
               Expanded(
-                child: ScopedBuilder(
+                child: ScopedBuilder<HomePageStore, SearchMoviesException,
+                        HomePageWidgetState>(
                     onError: (context, error) {
                       currentMoviesList = [];
 
@@ -88,21 +85,28 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         ),
                       );
                     },
-                    store: searchMovieStore,
-                    onState: (context, List<ResultSearchEntity> state) {
-                      final List<ResultSearchEntity> fetchedList =
-                          state.isEmpty ? currentMoviesList : state;
+                    store: homePageStore,
+                    onState: (context, HomePageWidgetState state) {
+                      late List<ResultSearchEntity> fetchedList;
 
+                      fetchedList = state.resultSearchList.isEmpty
+                          ? currentMoviesList
+                          : state.resultSearchList;
                       currentMoviesList.addAll(fetchedList);
 
-                      // print(currentMoviesList.length);
-                      // print(fetchedList.length);
+                      print(state.filteredByCategoryResultSearchList.length);
 
                       return ListView.builder(
-                        itemCount: (currentMoviesList.length),
+                        itemCount: (state
+                                .filteredByCategoryResultSearchList.isEmpty
+                            ? currentMoviesList.length
+                            : state.filteredByCategoryResultSearchList.length),
                         controller: _scrollController,
                         itemBuilder: (context, index) {
-                          final item = currentMoviesList[index];
+                          final item = state
+                                  .filteredByCategoryResultSearchList.isEmpty
+                              ? currentMoviesList[index]
+                              : state.filteredByCategoryResultSearchList[index];
 
                           return CardComponentWidget(
                             cardHeight: 180,
@@ -115,7 +119,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       );
                     }),
               ),
-              searchMovieStore.isLoading
+              homePageStore.isLoading
                   ? Expanded(
                       child: Stack(
                         children: [
