@@ -7,7 +7,7 @@ import 'package:movie_app_fteam/app/modules/search/infra/repositories/search_mov
 import 'package:movie_app_fteam/app/modules/search/presenter/store/home_page_store.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/widgets/pages/home_page_widget.dart';
 
-import '../../../domain/usecases/get_movie_categories_usecase.dart';
+import 'domain/usecases/get_movie_categories_usecase.dart';
 
 class HomePageModule extends Module {
   @override

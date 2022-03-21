@@ -28,12 +28,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   @override
   void initState() {
     super.initState();
-    homePageStore.getMoviesByText('a');
+
     _scrollController.addListener(() {
       final currentScroll = _scrollController.position.pixels;
       final maxScroll = _scrollController.position.maxScrollExtent;
 
-      if (currentScroll >= maxScroll) {
+      if (currentScroll >= maxScroll * 0.99) {
         homePageStore.getMoviesByText(
             _movieTitleTextEdController.text, currentPage++);
       }
@@ -93,8 +93,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           ? currentMoviesList
                           : state.resultSearchList;
                       currentMoviesList.addAll(fetchedList);
-
-                      print(state.filteredByCategoryResultSearchList.length);
 
                       return ListView.builder(
                         itemCount: (state
