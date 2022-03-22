@@ -5,7 +5,7 @@ import 'package:movie_app_fteam/app/modules/search/external/datasource/tmdb_sear
 import 'package:movie_app_fteam/app/modules/search/infra/repositories/get_movie_category_repository.dart';
 import 'package:movie_app_fteam/app/modules/search/infra/repositories/search_movie_repo_Impl.dart';
 import 'package:movie_app_fteam/app/modules/search/presenter/store/home_page_store.dart';
-import 'package:movie_app_fteam/app/modules/search/presenter/widgets/pages/home_page_widget.dart';
+import 'package:movie_app_fteam/app/modules/search/presenter/widgets/pages/search_page_widget.dart';
 
 import 'domain/usecases/get_movie_categories_usecase.dart';
 
@@ -18,7 +18,7 @@ class HomePageModule extends Module {
         Bind.factory((i) => SearchMovieByTextImpl(i())),
         Bind.factory((i) => SearchRepositoryImpl(i())),
         Bind.factory((i) => TmdbSearchMoviesByTextDataSource(i())),
-        Bind.singleton((i) => HomePageStore(i(), i())),
+        Bind((i) => HomePageStore(i(), i())),
       ];
 
   @override
